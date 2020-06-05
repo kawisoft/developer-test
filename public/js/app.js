@@ -1940,13 +1940,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AddColumn",
   props: ['popUp'],
@@ -2089,8 +2082,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    captureColumnName: function captureColumnName() {},
-    addRow: function addRow() {// Add new row to data with column keys
+    addRow: function addRow() {
+      var newRow = {};
+      this.columns.forEach(function (item) {
+        newRow[item.key] = '';
+      });
+      this.data.push(newRow);
     },
     removeRow: function removeRow(row_index) {// remove the given row
     },
@@ -57131,7 +57128,12 @@ var render = function() {
                         "button",
                         {
                           staticClass: "btn btn-secondary",
-                          attrs: { type: "button" }
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.addRow()
+                            }
+                          }
                         },
                         [_vm._v("Add Row")]
                       )

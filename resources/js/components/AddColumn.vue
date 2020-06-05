@@ -2,13 +2,6 @@
     <div>
         <b-button @click="modalShow = !modalShow">Add Column</b-button>
 
-<!--        <div class="mt-3">-->
-<!--            Submitted Names:-->
-<!--            <div v-if="submittedNames.length === 0">&#45;&#45;</div>-->
-<!--            <ul v-else class="mb-0 pl-3">-->
-<!--                <li v-for="name in submittedNames">{{ name }}</li>-->
-<!--            </ul>-->
-<!--        </div>-->
         <b-modal
             id="modal-prevent-closing"
             ref="modal"

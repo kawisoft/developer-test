@@ -38,7 +38,7 @@
                                     :modalShow="showAddColumn"
                                     v-on:captured-column-name="addColumn($event)"
                                 ></AddColumn>
-                                <button type="button" class="btn btn-secondary">Add Row</button>
+                                <button type="button" class="btn btn-secondary" @click="addRow()">Add Row</button>
 
                             </b-col>
                         </b-row>
@@ -82,18 +82,20 @@
                     {key: 'first_name'},
                     {key: 'last_name'},
                     {key: 'emailAddress'},
-
                 ]
             }
         },
 
         methods: {
-            captureColumnName() {
-
-            },
-
             addRow() {
-                // Add new row to data with column keys
+                const newRow = {};
+                this.columns.forEach(
+                    item => {
+                        newRow[item.key] = ''
+                    }
+                )
+
+                this.data.push(newRow);
             },
 
             removeRow(row_index) {
