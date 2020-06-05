@@ -2110,6 +2110,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CSVGenerator",
@@ -66771,101 +66773,100 @@ var render = function() {
               _vm._v("Table to CSV Generator")
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "card-body" },
-              [
-                _c("table", { staticClass: "table table-bordered" }, [
-                  _c("thead", [
-                    _c(
+            _c("div", { staticClass: "card-body" }, [
+              _c("table", { staticClass: "table table-bordered" }, [
+                _c("thead", [
+                  _c(
+                    "tr",
+                    [
+                      _vm._l(_vm.columns, function(column) {
+                        return _c("th", [
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "text" },
+                            domProps: { value: column.key },
+                            on: {
+                              input: function($event) {
+                                return _vm.updateColumnKey(column, $event)
+                              }
+                            }
+                          })
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _vm._m(0)
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.data, function(row, idx) {
+                    return _c(
                       "tr",
+                      { key: idx },
                       [
-                        _vm._l(_vm.columns, function(column) {
-                          return _c("th", [
+                        _vm._l(row, function(dataColumn, columnName) {
+                          return _c("td", [
                             _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: row[columnName],
+                                  expression: "row[columnName]"
+                                }
+                              ],
                               staticClass: "form-control",
                               attrs: { type: "text" },
-                              domProps: { value: column.key },
+                              domProps: { value: row[columnName] },
                               on: {
                                 input: function($event) {
-                                  return _vm.updateColumnKey(column, $event)
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(row, columnName, $event.target.value)
                                 }
                               }
                             })
                           ])
                         }),
                         _vm._v(" "),
-                        _vm._m(0)
+                        _c(
+                          "td",
+                          [
+                            _c(
+                              "b-button",
+                              {
+                                attrs: { variant: "danger" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.confirmRemoval(idx)
+                                  }
+                                }
+                              },
+                              [_vm._v("Delete")]
+                            )
+                          ],
+                          1
+                        )
                       ],
                       2
                     )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    _vm._l(_vm.data, function(row, i) {
-                      return _c(
-                        "tr",
-                        { key: i },
-                        [
-                          _vm._l(row, function(dataColumn, columnName) {
-                            return _c("td", [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: row[columnName],
-                                    expression: "row[columnName]"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "text" },
-                                domProps: { value: row[columnName] },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      row,
-                                      columnName,
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ])
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            [
-                              _c(
-                                "b-button",
-                                {
-                                  attrs: { variant: "danger" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.confirmRemoval(i)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Delete")]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        2
-                      )
-                    }),
-                    0
-                  )
-                ]),
-                _vm._v(" "),
+                  }),
+                  0
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-footer" },
+              [
                 _c(
                   "b-row",
+                  { staticClass: "text-align-left" },
                   [
                     _c(
                       "b-col",
@@ -66895,30 +66896,30 @@ var render = function() {
                         )
                       ],
                       1
-                    )
+                    ),
+                    _vm._v(" "),
+                    _c("b-col", [
+                      _c(
+                        "button",
+                        {
+                          ref: "submit",
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.submit()
+                            }
+                          }
+                        },
+                        [_vm._v("Export")]
+                      )
+                    ])
                   ],
                   1
                 )
               ],
               1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-footer text-right" }, [
-              _c(
-                "button",
-                {
-                  ref: "submit",
-                  staticClass: "btn btn-primary",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      return _vm.submit()
-                    }
-                  }
-                },
-                [_vm._v("Export")]
-              )
-            ])
+            )
           ]),
           _vm._v(" "),
           _c("b-overlay", {

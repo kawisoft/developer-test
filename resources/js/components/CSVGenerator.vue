@@ -22,19 +22,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="(row,i) in data" :key="i">
+                            <tr v-for="(row, idx) in data" :key="idx">
                                 <td v-for="(dataColumn, columnName) in row">
                                     <input type="text" class="form-control" v-model="row[columnName]"/>
                                 </td>
                                 <td>
-                                    <b-button variant="danger" @click="confirmRemoval(i)">Delete</b-button>
+                                    <b-button variant="danger" @click="confirmRemoval(idx)">Delete</b-button>
                                 </td>
                             </tr>
 
                             </tbody>
                         </table>
 
-                        <b-row>
+                    </div>
+
+                    <div class="card-footer">
+                        <b-row class="text-align-left">
                             <b-col style="display: inline">
                                 <AddColumn
                                     :modalShow="showAddColumn"
@@ -43,11 +46,10 @@
                                 <button type="button" class="btn btn-secondary" @click="addRow()">Add Row</button>
 
                             </b-col>
+                            <b-col>
+                                <button ref="submit" class="btn btn-primary" type="button" @click="submit()">Export</button>
+                            </b-col>
                         </b-row>
-                    </div>
-
-                    <div class="card-footer text-right">
-                        <button ref="submit" class="btn btn-primary" type="button" @click="submit()">Export</button>
                     </div>
                 </div>
 
