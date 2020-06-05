@@ -2108,10 +2108,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CSVGenerator",
@@ -66662,6 +66658,7 @@ var render = function() {
       _c(
         "b-button",
         {
+          staticClass: "btn",
           on: {
             click: function($event) {
               _vm.modalShow = !_vm.modalShow
@@ -66862,40 +66859,39 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "card-footer" },
+              { staticClass: "card-footer text-right" },
               [
                 _c(
-                  "b-row",
-                  { staticClass: "text-align-left" },
+                  "b-button-toolbar",
+                  {
+                    attrs: {
+                      "aria-label":
+                        "Toolbar with button groups and dropdown menu"
+                    }
+                  },
                   [
+                    _c("AddColumn", {
+                      staticStyle: { "margin-right": "20px" },
+                      attrs: { modalShow: _vm.showAddColumn },
+                      on: {
+                        "captured-column-name": function($event) {
+                          return _vm.addColumn($event)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
                     _c(
-                      "b-col",
-                      { staticStyle: { display: "inline" } },
-                      [
-                        _c("AddColumn", {
-                          attrs: { modalShow: _vm.showAddColumn },
-                          on: {
-                            "captured-column-name": function($event) {
-                              return _vm.addColumn($event)
-                            }
+                      "button",
+                      {
+                        staticClass: "margin-left btn btn-secondary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.addRow()
                           }
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-secondary",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                return _vm.addRow()
-                              }
-                            }
-                          },
-                          [_vm._v("Add Row")]
-                        )
-                      ],
-                      1
+                        }
+                      },
+                      [_vm._v("Add Row")]
                     ),
                     _vm._v(" "),
                     _c("b-col", [
@@ -66994,7 +66990,7 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                    Cancel\n                                "
+                                      "\n                                Cancel\n                            "
                                     )
                                   ]
                                 ),

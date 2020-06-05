@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-button @click="modalShow = !modalShow">Add Column</b-button>
+        <b-button class="btn" @click="modalShow = !modalShow">Add Column</b-button>
 
         <b-modal
             id="modal-prevent-closing"
