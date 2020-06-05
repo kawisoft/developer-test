@@ -16,21 +16,23 @@
                                            @input="updateColumnKey(column, $event)"
                                     />
                                 </th>
+                                <th>
+                                    <h4>Action</h4>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="row in data">
+                            <tr v-for="(row,i) in data" :key="i">
                                 <td v-for="(dataColumn, columnName) in row">
                                     <input type="text" class="form-control" v-model="row[columnName]"/>
                                 </td>
+                                <td>
+                                    <b-button variant="danger" @click="confirmRemoval(i)">Delete</b-button>
+                                </td>
                             </tr>
+
                             </tbody>
                         </table>
-
-
-<!--                        <button type="button" class="btn btn-secondary"-->
-<!--                                @click="$emit('popUpAddColumn',[{showAddColumn: !showAddColumn})"-->
-<!--                        >Add Column</button>-->
 
                         <b-row>
                             <b-col style="display: inline">
@@ -45,9 +47,43 @@
                     </div>
 
                     <div class="card-footer text-right">
-                        <button class="btn btn-primary" type="button" @click="submit()">Export</button>
+                        <button ref="submit" class="btn btn-primary" type="button" @click="submit()">Export</button>
                     </div>
                 </div>
+
+                <b-overlay :show="busy" no-wrap @shown="onShown" @hidden="onHidden">
+                        <template v-slot:overlay>
+                            <div v-if="processing" class="text-center p-4 bg-primary text-light rounded">
+                                <b-icon icon="cloud-upload" font-scale="4"></b-icon>
+                                <div class="mb-3">Processing...</div>
+                                <b-progress
+                                    min="1"
+                                    max="20"
+                                    :value="counter"
+                                    variant="success"
+                                    height="3px"
+                                    class="mx-n4 rounded-0"
+                                ></b-progress>
+                            </div>
+                            <div
+                                v-else
+                                ref="dialog"
+                                tabindex="-1"
+                                role="dialog"
+                                aria-modal="false"
+                                aria-labelledby="form-confirm-label"
+                                class="text-center p-3"
+                            >
+                                <p><strong id="form-confirm-label">Are you sure?</strong></p>
+                                <div class="d-flex">
+                                    <b-button variant="outline-danger" class="mr-3" @click="onCancel">
+                                        Cancel
+                                    </b-button>
+                                    <b-button variant="outline-success" @click="removeRow()">OK</b-button>
+                                </div>
+                            </div>
+                        </template>
+                    </b-overlay>
             </div>
         </div>
     </div>
@@ -64,6 +100,11 @@
         data() {
             return {
                 showAddColumn: false,
+                busy: false,
+                processing: false,
+                counter: 1,
+                interval: null,
+                selectedRowIndex: null,
 
                 data: [
                     {
@@ -86,6 +127,10 @@
             }
         },
 
+        beforeDestroy() {
+            this.clearInterval()
+        },
+
         methods: {
             addRow() {
                 const newRow = {};
@@ -98,8 +143,19 @@
                 this.data.push(newRow);
             },
 
-            removeRow(row_index) {
-                // remove the given row
+            confirmRemoval(rowIndex) {
+                this.processing = false
+                this.busy = true;
+                this.selectedRowIndex = rowIndex;
+                console.log(this.selectedRowIndex);
+            },
+
+            removeRow() {
+                console.log(this.selectedRowIndex);
+
+                this.data.splice(this.selectedRowIndex, 1);
+                this.processing = true;
+                this.busy = false;
             },
 
             addColumn(columnName) {
@@ -143,12 +199,27 @@
                 )
             },
 
-            submit() {
-                return axios.patch('/api/csv-export', this.data);
-            }
-        },
+            async submit() {
+                this.processing = true;
+                this.busy = true;
 
-        watch: {
+                try {
+                    const res = await axios.post('/api/csv-export', this.data);
+
+                } catch (err) {
+                    
+                }
+            },
+
+            onShown() {
+               this.$refs.dialog.focus()
+            },
+            onHidden() {
+                this.$refs.submit.focus()
+            },
+            onCancel() {
+                this.busy = false
+            },
         }
     }
 </script>
