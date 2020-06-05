@@ -69273,8 +69273,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/kyle/fu3e/developer-test/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/kyle/fu3e/developer-test/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/kwaku/webdev/technical-test/f3group/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/kwaku/webdev/technical-test/f3group/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
