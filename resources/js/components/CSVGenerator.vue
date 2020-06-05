@@ -27,8 +27,21 @@
                             </tbody>
                         </table>
 
-                        <button type="button" class="btn btn-secondary">Add Column</button>
-                        <button type="button" class="btn btn-secondary">Add Row</button>
+
+<!--                        <button type="button" class="btn btn-secondary"-->
+<!--                                @click="$emit('popUpAddColumn',[{showAddColumn: !showAddColumn})"-->
+<!--                        >Add Column</button>-->
+
+                        <b-row>
+                            <b-col style="display: inline">
+                                <AddColumn
+                                    :modalShow="showAddColumn"
+                                    v-on:captured-column-name="addColumn($event)"
+                                ></AddColumn>
+                                <button type="button" class="btn btn-secondary">Add Row</button>
+
+                            </b-col>
+                        </b-row>
                     </div>
 
                     <div class="card-footer text-right">
@@ -42,14 +55,19 @@
 </template>
 
 <script>
+    import AddColumn from "./AddColumn";
     export default {
         name: "CSVGenerator",
 
+        components: {AddColumn},
+
         data() {
             return {
+                showAddColumn: false,
+
                 data: [
                     {
-                        first_name: 'John',
+                        first_name: 'Jon',
                         last_name: 'Doe',
                         emailAddress: 'john.doe@example.com'
                     },
@@ -70,16 +88,35 @@
         },
 
         methods: {
-            add_row() {
+            captureColumnName() {
+
+            },
+
+            addRow() {
                 // Add new row to data with column keys
             },
 
-            remove_row(row_index) {
+            removeRow(row_index) {
                 // remove the given row
             },
 
-            add_column() {
+            addColumn(columnName) {
+                if (typeof(columnName) == "undefined") {
+                    throw new Exception('Oops! missing column name')
+                }
 
+                this.columns.push({key: columnName})
+                this.updateDataColumnKey(columnName)
+            },
+
+            updateDataColumnKey(columnKey) {
+                this.data.forEach(
+                    (row) => {
+                        if (!row.hasOwnProperty(columnKey)) {
+                            row[columnKey] = '';
+                        }
+                    }
+                )
             },
 
             updateColumnKey(column, event) {

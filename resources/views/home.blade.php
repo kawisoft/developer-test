@@ -48,8 +48,8 @@
     </body>
 </html>
 <script>
-    import CSVGenerator from "../js/components/CSVGenerator";
-    export default {
-        components: {CSVGenerator}
-    }
+    // import CSVGenerator from "../js/components/CSVGenerator";
+    // export default {
+    //     components: {CSVGenerator}
+    // }
 </script>
