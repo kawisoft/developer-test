@@ -53,7 +53,7 @@
 
                 <b-overlay :show="busy" no-wrap @shown="onShown" @hidden="onHidden">
                         <template v-slot:overlay>
-                            <div v-if="processing" class="text-center p-4 bg-primary text-light rounded">
+                            <div ref="dialog" v-if="processing" class="text-center p-4 bg-primary text-light rounded">
                                 <b-icon icon="cloud-upload" font-scale="4"></b-icon>
                                 <div class="mb-3">Processing...</div>
                                 <b-progress
@@ -202,13 +202,35 @@
             async submit() {
                 this.processing = true;
                 this.busy = true;
+                let header = [];
+
+                this.columns.map(col => {
+                    header.push(col.key);
+                });
 
                 try {
-                    const res = await axios.post('/api/csv-export', this.data);
+                    const res = await axios.post('/api/csv-export', {
+                        header: header,
+                        payload: this.data,
+                        responseType: 'blob'
+                    });
+
+                    this.busy = this.processing = false;
+                    this.processDownload(res.data);
 
                 } catch (err) {
-                    
+                    alert(`Oops! request failed`);
+                    this.busy = this.processing = false;
                 }
+            },
+
+            processDownload(data) {
+                const url = window.URL.createObjectURL(new Blob([data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'f3group.csv');
+                document.body.appendChild(link);
+                link.click();
             },
 
             onShown() {

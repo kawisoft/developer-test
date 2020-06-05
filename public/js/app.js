@@ -2207,33 +2207,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var res;
+        var header, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.processing = true;
                 _this.busy = true;
-                _context.prev = 2;
-                _context.next = 5;
-                return axios.post('/api/csv-export', _this.data);
+                header = [];
 
-              case 5:
+                _this.columns.map(function (col) {
+                  header.push(col.key);
+                });
+
+                _context.prev = 4;
+                _context.next = 7;
+                return axios.post('/api/csv-export', {
+                  header: header,
+                  payload: _this.data,
+                  responseType: 'blob'
+                });
+
+              case 7:
                 res = _context.sent;
-                _context.next = 10;
+                _this.busy = _this.processing = false;
+
+                _this.processDownload(res.data);
+
+                _context.next = 16;
                 break;
 
-              case 8:
-                _context.prev = 8;
-                _context.t0 = _context["catch"](2);
+              case 12:
+                _context.prev = 12;
+                _context.t0 = _context["catch"](4);
+                alert("Oops! request failed");
+                _this.busy = _this.processing = false;
 
-              case 10:
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[2, 8]]);
+        }, _callee, null, [[4, 12]]);
       }))();
+    },
+    processDownload: function processDownload(data) {
+      var url = window.URL.createObjectURL(new Blob([data]));
+      var link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'f3group.csv');
+      document.body.appendChild(link);
+      link.click();
     },
     onShown: function onShown() {
       this.$refs.dialog.focus();
@@ -66909,6 +66933,7 @@ var render = function() {
                       ? _c(
                           "div",
                           {
+                            ref: "dialog",
                             staticClass:
                               "text-center p-4 bg-primary text-light rounded"
                           },
