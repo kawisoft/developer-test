@@ -6,23 +6,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class HappyCaseTest extends TestCase
+class SadCaseTest extends TestCase
 {
-    protected function setUp(): void
+
+    /** @test */
+    public function column_header_is_missing()
     {
-        parent::setUp();
+        $header = ['First Name', 'Last Name', 'Email Address'];
+        $payload = [
+            ['firstName' => 'Jon', 'lastName' => 'Doe',  'emailAddress' => 'jon@example.com']
+        ];
 
-    }
+        $response = $this->postJson('/api/csv-export', [
+            'heade' => $header,
+            'payload' => $payload
+        ]);
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-
-
-        $response->assertStatus(200);
+        $response
+            ->assertStatus(422);
     }
 }
