@@ -9,10 +9,10 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th v-for="column in columns">
+                                <th v-for="(column, i) in columns" :key="i">
                                     <input type="text"
                                            class="form-control"
-                                           :value="column.key"
+                                           :value=" column.key | toSentenceCase"
                                            @input="updateColumnKey(column, $event)"
                                     />
                                 </th>
@@ -106,27 +106,31 @@
 
                 data: [
                     {
-                        first_name: 'Jon',
-                        last_name: 'Doe',
+                        firstName: 'Jon',
+                        lastName: 'Doe',
                         emailAddress: 'john.doe@example.com'
                     },
                     {
-                        first_name: 'John',
-                        last_name: 'Doe',
+                        firstName: 'John',
+                        lastName: 'Doe',
                         emailAddress: 'john.doe@example.com'
                     },
 
                 ],
                 columns: [
-                    {key: 'first_name'},
-                    {key: 'last_name'},
+                    {key: 'firstName'},
+                    {key: 'lastName'},
                     {key: 'emailAddress'},
                 ]
             }
         },
 
-        beforeDestroy() {
-            this.clearInterval()
+        filters: {
+            toSentenceCase: (camelCase) => {
+                return camelCase
+                    .replace(/([A-Z])/g, (match) => ` ${match}`)
+                    .replace(/^./, (match) => match.toUpperCase());
+            }
         },
 
         methods: {
@@ -203,7 +207,7 @@
                 let header = [];
 
                 this.columns.map(col => {
-                    header.push(col.key);
+                    header.push(this.$options.filters.toSentenceCase(col.key));
                 });
 
                 try {

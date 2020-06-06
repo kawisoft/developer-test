@@ -2123,25 +2123,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       interval: null,
       selectedRowIndex: null,
       data: [{
-        first_name: 'Jon',
-        last_name: 'Doe',
+        firstName: 'Jon',
+        lastName: 'Doe',
         emailAddress: 'john.doe@example.com'
       }, {
-        first_name: 'John',
-        last_name: 'Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         emailAddress: 'john.doe@example.com'
       }],
       columns: [{
-        key: 'first_name'
+        key: 'firstName'
       }, {
-        key: 'last_name'
+        key: 'lastName'
       }, {
         key: 'emailAddress'
       }]
     };
   },
-  beforeDestroy: function beforeDestroy() {
-    this.clearInterval();
+  filters: {
+    toSentenceCase: function toSentenceCase(camelCase) {
+      return camelCase.replace(/([A-Z])/g, function (match) {
+        return " ".concat(match);
+      }).replace(/^./, function (match) {
+        return match.toUpperCase();
+      });
+    }
   },
   methods: {
     addRow: function addRow() {
@@ -2215,7 +2221,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 header = [];
 
                 _this.columns.map(function (col) {
-                  header.push(col.key);
+                  header.push(_this.$options.filters.toSentenceCase(col.key));
                 });
 
                 _context.prev = 4;
@@ -66776,12 +66782,14 @@ var render = function() {
                   _c(
                     "tr",
                     [
-                      _vm._l(_vm.columns, function(column) {
-                        return _c("th", [
+                      _vm._l(_vm.columns, function(column, i) {
+                        return _c("th", { key: i }, [
                           _c("input", {
                             staticClass: "form-control",
                             attrs: { type: "text" },
-                            domProps: { value: column.key },
+                            domProps: {
+                              value: _vm._f("toSentenceCase")(column.key)
+                            },
                             on: {
                               input: function($event) {
                                 return _vm.updateColumnKey(column, $event)

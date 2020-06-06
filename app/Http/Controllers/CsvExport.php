@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CsvExport extends Controller {
     /**
@@ -17,23 +17,37 @@ class CsvExport extends Controller {
             throw new \Exception('Request failed!');
         }
 
+        $validation = Validator::make($request->all(), [
+            'payload' => 'required|array',
+            'header' => 'required|array'
+        ]);
+
+        if ($validation->fails()) {
+            return $this->throwValidation($validation->messages()->first());
+        }
+
         $data = $request->payload;
         $header = $request->header;
 
-        return new StreamedResponse(
-            function () use ($header, $data) {
+        return response()->streamDownload(
+            function() use ($header, $data) {
                 $handle = fopen('php://output', 'w');
-                fputcsv($handle, $header);
+                    fputcsv($handle, $header);
 
-                foreach ($data as $row) {
-                    fputcsv($handle, $row);
-                }
+                    foreach ($data as $row) {
+                        fputcsv($handle, $row);
+                    }
 
-                fclose($handle);
-            },200, [
-                'Content-type'        => 'text/csv',
-                'Content-Disposition' => 'attachment; filename=data.csv'
-            ]
+                    fclose($handle);
+            },
+            'data.csv',
+            ['Content-type' => 'text/csv']
         );
+    }
+
+    public function throwValidation($message)
+    {
+        return $this->setStatusCode(422)
+            ->respondWithError($message);
     }
 }
